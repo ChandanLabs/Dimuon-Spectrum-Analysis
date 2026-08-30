@@ -1,0 +1,17 @@
+__pycache__/
+*.pyc
+*.pyo
+.ipynb_checkpoints/
+.DS_Store
+.env
+venv/
+.venv/
+*.egg-info/
+dist/
+build/
+
+# Keep download script but ignore raw data CSVs
+data/*.csv
+
+# Keep figures but not system files
+figures/.DS_Store
