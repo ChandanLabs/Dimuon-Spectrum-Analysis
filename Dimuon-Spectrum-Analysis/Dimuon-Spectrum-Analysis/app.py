@@ -6,12 +6,11 @@ import sys
 import os
 import subprocess
 
-# 1. Dynamically find the absolute path to the repository root (2 levels up from app.py)
+# 1. Get the exact directory where app.py is located
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-REPO_ROOT = os.path.abspath(os.path.join(CURRENT_DIR, '../../'))
 
-# 2. Add the root directory to sys.path so 'src.physics_utils' can be found
-sys.path.insert(0, REPO_ROOT)
+# 2. Add this directory to sys.path so 'src.physics_utils' can be found
+sys.path.insert(0, CURRENT_DIR)
 from src.physics_utils import compute_invariant_mass, fit_resonance
 
 st.title("Dimuon Invariant Mass Analysis")
@@ -19,14 +18,14 @@ st.markdown("**CERN CMS Open Data** — Real particle collision events")
 
 @st.cache_data
 def load_data():
-    # 3. Construct absolute paths to the data folder at the root
-    file_path = os.path.join(REPO_ROOT, 'data', 'dimuon.csv')
-    download_script = os.path.join(REPO_ROOT, 'data', 'download_data.py')
+    # 3. Construct absolute paths looking right next to app.py
+    file_path = os.path.join(CURRENT_DIR, 'data', 'dimuon.csv')
+    download_script = os.path.join(CURRENT_DIR, 'data', 'download_data.py')
     
     if not os.path.exists(file_path):
         if os.path.exists(download_script):
-            # 4. Run the download script, setting the working directory to the repo root
-            subprocess.run(['python', 'data/download_data.py'], check=True, cwd=REPO_ROOT)
+            # 4. Run the download script, keeping the working directory here
+            subprocess.run(['python', 'data/download_data.py'], check=True, cwd=CURRENT_DIR)
         else:
             st.error(f"Could not find the download script at: {download_script}. Please check your GitHub folder structure.")
             st.stop()
